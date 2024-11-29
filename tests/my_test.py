@@ -1,4 +1,9 @@
-class TestPhrase:
-    def test_phrase_length(self):
-        phrase = input("Set a phrase: ")
-        assert len(phrase) < 15, "The phrase is longer than 15 characters"
+import requests
+import pytest
+
+class TestCookie:
+    def test_cookie(self):
+        response = requests.get("https://playground.learnqa.ru/api/homework_cookie")
+        cookie = response.cookies
+        print(cookie)
+        assert cookie != "", "Cookies are not included in the response"
