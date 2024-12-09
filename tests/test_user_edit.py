@@ -118,7 +118,6 @@ class TestUserEdit(BaseCase):
                                    )
 
         Assertions.assert_code_status(response4, 400)
-        print(response4.content)
         assert f"Auth token not supplied" in response4.content.decode("utf-8"), \
         f"Unexpected response content {response4.content}"
 
