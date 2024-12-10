@@ -79,7 +79,7 @@ class TestUserEdit(BaseCase):
 
     def test_edit_another_auth_user(self):
 
-    # REGISTER FIRST USER
+        # REGISTER FIRST USER
         register_data1 = self.prepare_registration_data()
         response1 = MyRequests.post("/user/", data=register_data1)
 
@@ -91,7 +91,7 @@ class TestUserEdit(BaseCase):
 
         time.sleep(1)
 
-    # REGISTER SECOND USER
+        # REGISTER SECOND USER
         register_data2 = self.prepare_registration_data()
         response2 = MyRequests.post("/user/", data=register_data2)
 
@@ -100,7 +100,7 @@ class TestUserEdit(BaseCase):
 
         user_id2 = self.get_json_value(response2, "id")
 
-    # LOGIN FIRST USER
+        # LOGIN FIRST USER
         login_data = {
             "email": email,
             "password": password
@@ -108,18 +108,26 @@ class TestUserEdit(BaseCase):
 
         response3 = MyRequests.post("/user/login", data=login_data)
 
+        auth_sid = self.get_cookie(response3, "auth_sid")
+        token = self.get_header(response3, "x-csrf-token")
+
         Assertions.assert_code_status(response3, 200)
 
-    # EDIT SECOND USER
+        # EDIT SECOND USER
         new_name = "Changed Name"
 
         response4 = MyRequests.put(f"/user/{user_id2}",
+                                   headers={"x-csrf-token": token},
+                                   cookies={"auth_sid": auth_sid},
                                    data={"firstName": new_name}
                                    )
 
+        json_text = response4.json()
+        error_text = json_text['error']
+
         Assertions.assert_code_status(response4, 400)
-        assert f"Auth token not supplied" in response4.content.decode("utf-8"), \
-        f"Unexpected response content {response4.content}"
+        assert error_text == "This user can only edit their own data.", \
+        f"Unexpected error {error_text}"
 
     def test_edit_email_auth_user(self):
 

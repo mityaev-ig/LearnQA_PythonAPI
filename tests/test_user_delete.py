@@ -106,15 +106,21 @@ class TestUserDelete(BaseCase):
 
         response3 = MyRequests.post("/user/login", data=login_data)
 
+        auth_sid = self.get_cookie(response3, "auth_sid")
+        token = self.get_header(response3, "x-csrf-token")
+
         Assertions.assert_code_status(response3, 200)
 
         # DELETE SECOND USER
 
-        response4 = MyRequests.put(f"/user/{user_id2}",)
+        response4 = MyRequests.delete(f"/user/{user_id2}",
+                                   headers={"x-csrf-token": token},
+                                   cookies={"auth_sid": auth_sid},
+                                   )
 
         json_text = response4.json()
         error_text = json_text['error']
 
         Assertions.assert_code_status(response4, 400)
-        assert error_text == "Auth token not supplied", \
+        assert error_text == "This user can only delete their own account.", \
         f"Unexpected error {error_text}"
