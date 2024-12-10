@@ -1,11 +1,18 @@
 import time
 from datetime import datetime
+import allure
 from lib.my_requests import MyRequests
 from lib.assertions import Assertions
 from lib.base_case import BaseCase
 
+@allure.epic("Edit tests")
 class TestUserEdit(BaseCase):
 
+    @allure.title("Test edit just created user")
+    @allure.tag("Edit")
+    @allure.severity("critical")
+    @allure.description("This test edit just created user")
+    @allure.link("Website")
     def test_edit_just_created_user(self):
 
     # REGISTER
@@ -55,6 +62,11 @@ class TestUserEdit(BaseCase):
             "Wrong name of the user after edit"
         )
 
+    @allure.title("Test edit not auth user")
+    @allure.tag("Edit")
+    @allure.severity("High")
+    @allure.description("This test edit not auth user")
+    @allure.link("Website")
     def test_edit_not_auth_user(self):
 
     # REGISTER
@@ -77,6 +89,11 @@ class TestUserEdit(BaseCase):
         assert f"Auth token not supplied" in response2.content.decode("utf-8"), \
         f"Unexpected response content {response2.content}"
 
+    @allure.title("Test edit another auth user")
+    @allure.tag("Edit")
+    @allure.severity("high")
+    @allure.description("This test edit another auth user")
+    @allure.link("Website")
     def test_edit_another_auth_user(self):
 
         # REGISTER FIRST USER
@@ -129,6 +146,11 @@ class TestUserEdit(BaseCase):
         assert error_text == "This user can only edit their own data.", \
         f"Unexpected error {error_text}"
 
+    @allure.title("Test edit email auth user")
+    @allure.tag("Edit")
+    @allure.severity("high")
+    @allure.description("This test edit email auth user")
+    @allure.link("Website")
     def test_edit_email_auth_user(self):
 
     # REGISTER
@@ -173,6 +195,11 @@ class TestUserEdit(BaseCase):
         assert f"Invalid email format" in response3.content.decode("utf-8"), \
         f"Unexpected response content {response3.content}"
 
+    @allure.title("Test edit created user on short name")
+    @allure.tag("Edit")
+    @allure.severity("high")
+    @allure.description("This test edit created user on short name")
+    @allure.link("Website")
     def test_edit_created_user_on_short_name(self):
 
     # REGISTER

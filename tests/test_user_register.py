@@ -1,5 +1,5 @@
 import pytest
-
+import allure
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
@@ -7,9 +7,14 @@ from datetime import datetime
 from random import choice
 from string import ascii_uppercase
 
-
+@allure.epic("Registration tests")
 class TestUserRegister(BaseCase):
 
+    @allure.title("Test create user successfully")
+    @allure.tag("Registration")
+    @allure.severity("Critical")
+    @allure.description("This test successfully create by email and password")
+    @allure.link("Website")
     def test_create_user_successfully(self):
         data = self.prepare_registration_data()
 
@@ -18,6 +23,11 @@ class TestUserRegister(BaseCase):
         Assertions.assert_code_status(response, 200)
         Assertions.assert_json_has_key(response, "id")
 
+    @allure.title("Test create user with existing email")
+    @allure.tag("Registration")
+    @allure.severity("Critical")
+    @allure.description("This test create user with existing email")
+    @allure.link("Website")
     def test_create_user_with_existing_email(self):
         email = "vinkotov@example.com"
         data = self.prepare_registration_data(email)
@@ -27,6 +37,11 @@ class TestUserRegister(BaseCase):
         Assertions.assert_code_status(response, 400)
         assert  response.content.decode("utf-8") == f"Users with email '{email}' already exists", f"Unexpected response content {response.content}"
 
+    @allure.title("Test create user with incorrect email")
+    @allure.tag("Registration")
+    @allure.severity("Critical")
+    @allure.description("This test create user with incorrect email")
+    @allure.link("Website")
     def test_create_user_with_incorrect_email(self, email=None):
         if email is None:
             base_part = "learnqa"
@@ -72,7 +87,11 @@ class TestUserRegister(BaseCase):
         None
     ]
 
-
+    @allure.title("Test create user without param")
+    @allure.tag("Registration")
+    @allure.severity("High")
+    @allure.description("This test create user without one param")
+    @allure.link("Website")
     @pytest.mark.parametrize(
         'password, username, firstname, lastname, email',
         [
@@ -99,6 +118,11 @@ class TestUserRegister(BaseCase):
         Assertions.assert_code_status(response, 400)
         assert f"The following required params are missed:" in response.content.decode("utf-8"), f"Unexpected response content {response.content}"
 
+    @allure.title("Test create user with short name")
+    @allure.tag("Registration")
+    @allure.severity("High")
+    @allure.description("This test create user with short name")
+    @allure.link("Website")
     def test_create_user_with_short_name(self, email=None):
 
         if email is None:
@@ -121,6 +145,11 @@ class TestUserRegister(BaseCase):
         assert response.content.decode("utf-8") == f"The value of 'username' field is too short",\
         f"Unexpected response content {response.content}"
 
+    @allure.title("Test create user with long name")
+    @allure.tag("Registration")
+    @allure.severity("High")
+    @allure.description("This test create user with long name")
+    @allure.link("Website")
     def test_create_user_with_long_name(self, email=None):
 
         if email is None:

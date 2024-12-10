@@ -1,10 +1,18 @@
 import time
+import allure
 from datetime import datetime
 from lib.my_requests import MyRequests
 from lib.assertions import Assertions
 from lib.base_case import BaseCase
 
+@allure.epic("Delete tests")
 class TestUserDelete(BaseCase):
+
+    @allure.title("Test delete user")
+    @allure.tag("Delete")
+    @allure.severity("critical")
+    @allure.description("This test delete user")
+    @allure.link("Website")
     def test_delete_user(self):
 
         #LOGIN
@@ -33,6 +41,11 @@ class TestUserDelete(BaseCase):
         assert error_text == "Please, do not delete test users with ID 1, 2, 3, 4 or 5.", \
         f"Unexpected error {error_text}"
 
+    @allure.title("Test delete just created user")
+    @allure.tag("Delete")
+    @allure.severity("high")
+    @allure.description("This test delete just created user")
+    @allure.link("Website")
     def test_delete_just_created_user(self):
 
         # REGISTER
@@ -75,6 +88,11 @@ class TestUserDelete(BaseCase):
         assert response4.content.decode("utf-8") == f"User not found",\
         "User don't delete"
 
+    @allure.title("Test delete another user")
+    @allure.tag("Delete")
+    @allure.severity("high")
+    @allure.description("This test delete another user")
+    @allure.link("Website")
     def test_delete_another_user(self):
 
         # REGISTER FIRST USER
